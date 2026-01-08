@@ -1,6 +1,6 @@
 ﻿# E视界 (DongguaTV Enhanced Edition)
 
-这是一个经过全面重构和升级的现代流媒体聚合播放器，基于 Node.js 和 Vue 3 构建。相比原版，本作引入了 Netflix 风格的沉浸式 UI、TMDb 数据驱动的动态榜单、以及智能的多源聚合搜索功能。
+这是一个经过全面重构和升级的现代流媒体聚合播放器，基于 Node.js 和 Vue 3 构建。相比原版 https://github.com/Minerchu/dongguaTV ，本作添加了许多功能。
 
 # 演示网站
 
@@ -35,7 +35,7 @@ https://ednovas-test.vercel.app （不包含任何数据）
 
 ### 1. 🎬 双引擎数据驱动
 - **TMDb (The Movie Database)**：提供高质量的电影/剧集元数据（海报、背景图、评分、简介、演职员表）。
-- **CMS 聚合源 (Maccms)**：集成 **48+** 个第三方资源站 API，自动进行**全网测速**，智能过滤失效源，确保播放流畅。
+- **CMS 聚合源 (Maccms)**：可集成多个自定义第三方资源站 API，自动进行**全网测速**，智能过滤失效源，确保播放流畅。
 
 ### 2. 🔍 智能搜索与聚合
 - **实时流式搜索 (SSE)**：采用 Server-Sent Events 技术，搜索结果**边搜边显**，即时反馈，无需等待所有源响应。
@@ -737,7 +737,16 @@ docker run -d -p 3000:3000 \
 
 如果您 Fork 了本项目并希望永久修改默认配置：
 
-1.  编辑 `capacitor.config.json`，修改 `server.url` 为您的服务器地址：
+##### 📱 配置文件位置
+
+| 版本 | 配置文件路径 | App ID |
+|-----|-------------|--------|
+| **手机版** | `capacitor.config.json` | `com.ednovas.donguatv` |
+| **电视版** | `android-tv/capacitor.config.json` | `com.ednovas.donguatv.tv` |
+
+两个版本的配置格式相同，只需修改 `server.url` 即可更改内置网站地址：
+
+1.  编辑对应的 `capacitor.config.json`，修改 `server.url` 为您的服务器地址：
     ```json
     {
       "appId": "com.ednovas.donguatv",
@@ -766,32 +775,8 @@ docker run -d -p 3000:3000 \
     ```
     APK 位于 `android/app/build/outputs/apk/release/`
 
-#### 🏠 内网 HTTP 使用说明
-
-> **⚠️ 重要**：从 Android 9 (API 28) 开始，Android 默认禁止明文 HTTP 流量 (Cleartext Traffic)。如果您的 APK 无法连接 HTTP 服务器，请确认以下配置。
-
-**问题现象**：
-- APK 在 Android TV / 手机上一直显示 loading
-- 浏览器可以正常访问 `http://192.168.x.x:3000`，但 APP 不行
-- 控制台报错 `net::ERR_CLEARTEXT_NOT_PERMITTED`
-
-**解决方案**：
-
-本项目已内置 HTTP 支持配置。如果您使用 GitHub Actions 自动构建或本地构建，APK 会自动支持 HTTP 访问。
-
-**使用 GitHub Actions 构建内网 APK**：
-
-1. 进入 **Actions** → **Android Build & Release** → **Run workflow**
-2. 填写您的内网服务器地址：`http://192.168.1.100:3000`
-3. 构建完成后下载 APK，即可正常访问 HTTP 服务
-
-**📝 注意事项**：
-- `capacitor.config.json` 中的 `"cleartext": true` 是 Capacitor 配置，但 Android 9+ 还需要上述 Android 原生配置
-- 如果您手动构建 APK，请确保项目代码是最新版本（包含上述配置）
-- 建议使用固定 IP 地址而非主机名，避免 DNS 解析问题
 
 ---
-
 
 
 ## 💾 数据维护与备份
